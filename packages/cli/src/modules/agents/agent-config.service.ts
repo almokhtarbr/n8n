@@ -25,6 +25,7 @@ import {
 	isUnconfiguredAgent,
 	type AgentActor,
 } from './agent-modification-telemetry.service';
+import { AgentPolicyService } from './agent-policy.service';
 import { AgentRuntimeCacheService } from './agent-runtime-cache.service';
 import { AgentSetupCompletionService } from './agent-setup-completion.service';
 import { AgentSkillsService } from './agent-skills.service';
@@ -81,6 +82,7 @@ export class AgentConfigService {
 		private readonly setupCompletionService: AgentSetupCompletionService,
 		private readonly modificationTelemetry: AgentModificationTelemetryService,
 		private readonly agentUpdateBroadcaster: AgentUpdateBroadcaster,
+		private readonly agentPolicyService: AgentPolicyService,
 	) {}
 
 	/**
@@ -193,6 +195,13 @@ export class AgentConfigService {
 			clearOmitted,
 		);
 		const replacement = this.buildConfigReplacement(entity, validatedConfig, config, clearOmitted);
+		await this.agentPolicyService.enforceSave(
+			projectId,
+			agentId,
+			replacement.nextSchema,
+			replacement.previousSchema,
+			{ kind: 'user', user },
+		);
 		entity.schema = replacement.nextSchema;
 		entity.name = validatedConfig.name;
 		entity.integrations = replacement.nextIntegrations;
