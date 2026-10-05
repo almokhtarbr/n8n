@@ -18,7 +18,7 @@ export interface PackageDisk {
 type Fixtures = {
 	/** Publishes every fixture package into the stack's registry, once per worker, before any test runs. */
 	publishedPackages: readonly FixturePackage[];
-	/** Node API level the instance supports: 2.x runs level 1, 3.x runs level 3. */
+	/** Node API major the instance supports: 2.x runs level 1, 3.x runs level 3. */
 	supportedNodesApiVersion: number;
 	/** What the package left on the instance's disk; follows the main container across a restart. */
 	packageDisk: PackageDisk;
