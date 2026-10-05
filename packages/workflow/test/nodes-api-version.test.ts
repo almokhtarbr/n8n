@@ -38,6 +38,14 @@ describe('parseNodesApiLevel', () => {
 			expect(parseNodesApiLevel(value)).toBeNull();
 		},
 	);
+
+	// semver throws on components above Number.MAX_SAFE_INTEGER.
+	it.each([2 ** 53, '9007199254740992', '1.9007199254740992', '99999999999999999999999'])(
+		'rejects the out-of-range level %p',
+		(value) => {
+			expect(parseNodesApiLevel(value)).toBeNull();
+		},
+	);
 });
 
 describe('checkNodesApiVersion', () => {
@@ -106,7 +114,19 @@ describe('checkNodesApiVersion', () => {
 		});
 	});
 
-	for (const declared of ['3.1.0', 'three', 0, -1, 2.5, null, NaN, Infinity, true, {}]) {
+	for (const declared of [
+		'3.1.0',
+		'three',
+		0,
+		-1,
+		2.5,
+		null,
+		NaN,
+		Infinity,
+		true,
+		{},
+		'9007199254740992',
+	]) {
 		it(`rejects malformed value ${String(declared)}`, () => {
 			expect(checkNodesApiVersion(pkg(declared))).toEqual({
 				compatible: false,

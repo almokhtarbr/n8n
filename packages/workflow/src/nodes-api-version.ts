@@ -48,8 +48,9 @@ const LEVEL_PATTERN = /^(\d+)(?:\.(\d+))?$/;
  * therefore rejected, not guessed at. `3.0` is read as the integer `3`.
  */
 export function parseNodesApiLevel(value: unknown): NodesApiLevel | null {
+	// Safe integers only: semver throws on larger components.
 	if (typeof value === 'number') {
-		return Number.isInteger(value) && value >= 1 ? [value, 0] : null;
+		return Number.isSafeInteger(value) && value >= 1 ? [value, 0] : null;
 	}
 
 	if (typeof value !== 'string') return null;
@@ -58,9 +59,10 @@ export function parseNodesApiLevel(value: unknown): NodesApiLevel | null {
 	if (!match) return null;
 
 	const major = Number(match[1]);
-	if (major < 1) return null;
+	const minor = match[2] === undefined ? 0 : Number(match[2]);
+	if (major < 1 || !Number.isSafeInteger(major) || !Number.isSafeInteger(minor)) return null;
 
-	return [major, match[2] === undefined ? 0 : Number(match[2])];
+	return [major, minor];
 }
 
 /** Renders a level as `<major>.<minor>`, so `3`, `" 3.0 "` and `"03.0"` all read as `3.0`. */

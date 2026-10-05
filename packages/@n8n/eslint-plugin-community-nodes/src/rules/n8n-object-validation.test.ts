@@ -105,6 +105,12 @@ ruleTester.run('n8n-object-validation', N8nObjectValidationRule, {
 			errors: [{ messageId: 'invalidNodesApiVersion', data: { value: '3.1.0' } }],
 		},
 		{
+			name: 'n8nNodesApiVersion is a string with an out-of-range major',
+			filename: 'package.json',
+			code: '{ "name": "n8n-nodes-example", "n8n": { "n8nNodesApiVersion": "9007199254740992", "nodes": ["dist/x.js"] } }',
+			errors: [{ messageId: 'invalidNodesApiVersion', data: { value: '9007199254740992' } }],
+		},
+		{
 			name: 'n8nNodesApiVersion is a zero-major string',
 			filename: 'package.json',
 			code: '{ "name": "n8n-nodes-example", "n8n": { "n8nNodesApiVersion": "0.1", "nodes": ["dist/x.js"] } }',

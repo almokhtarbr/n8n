@@ -201,9 +201,13 @@ function validatePathArray(
  * because an unquoted `3.10` is read as `3.1`.
  */
 function isApiLevel(value: unknown): boolean {
-	if (typeof value === 'number') return Number.isInteger(value) && value > 0;
+	// Safe integers only, so lint matches the runtime parser in n8n-workflow.
+	if (typeof value === 'number') return Number.isSafeInteger(value) && value > 0;
 	if (typeof value !== 'string') return false;
 
 	const match = /^(\d+)(?:\.(\d+))?$/.exec(value.trim());
-	return match !== null && Number(match[1]) > 0;
+	if (match === null) return false;
+
+	const [major, minor] = [Number(match[1]), Number(match[2] ?? 0)];
+	return major > 0 && Number.isSafeInteger(major) && Number.isSafeInteger(minor);
 }
