@@ -17,7 +17,6 @@ import {
 	InstanceSettings,
 	StorageConfig,
 	WorkflowExecute,
-	WorkflowHasIssuesError,
 } from 'n8n-core';
 import type {
 	ExecutionError,
@@ -714,11 +713,6 @@ export class WorkflowRunner {
 						),
 				);
 		} catch (error) {
-			if (error instanceof WorkflowHasIssuesError) {
-				await this.failExecution(data, executionId, error);
-				return;
-			}
-
 			await this.processError(
 				error,
 				new Date(),
