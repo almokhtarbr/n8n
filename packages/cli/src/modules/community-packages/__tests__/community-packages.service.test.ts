@@ -711,6 +711,16 @@ describe('CommunityPackagesService', () => {
 				expect(loadNodesAndCredentials.loadPackage).toHaveBeenCalledWith(PACKAGE_NAME);
 				expect(installedPackageRepository.replaceInstalledPackageWithNodes).toHaveBeenCalled();
 			});
+
+			test('should update to a package that declares the supported level with an explicit minor', async () => {
+				license.isCustomNpmRegistryEnabled.mockReturnValue(true);
+
+				await expect(updateToIncompatible(`${supportedMajor}.${supportedMinor}`)).resolves.toBe(
+					packageAfterUpdate,
+				);
+
+				expect(loadNodesAndCredentials.loadPackage).toHaveBeenCalledWith(PACKAGE_NAME);
+			});
 		});
 
 		test('should remove the package.json dependency when a fresh install fails', async () => {
@@ -1428,7 +1438,7 @@ describe('CommunityPackagesService', () => {
 				JSON.stringify({
 					name: 'package-1',
 					version: '1.0.0',
-					n8n: { n8nNodesApiVersion: N8N_NODES_API_VERSION + 1 },
+					n8n: { n8nNodesApiVersion: oneMinorAboveSupported },
 				}),
 			);
 

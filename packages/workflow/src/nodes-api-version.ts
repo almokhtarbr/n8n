@@ -44,8 +44,8 @@ const LEVEL_PATTERN = /^(\d+)(?:\.(\d+))?$/;
  * Levels are compared as `[major, minor]`, never as decimal numbers. A number
  * is valid only as an integer (`3` means `3.0`). A minor level must be a
  * string, because an unquoted `3.10` in package.json is read as `3.1`, and
- * `3.9` is read as greater than `3.10`. A number with a decimal point is
- * therefore rejected, not guessed at.
+ * `3.9` is read as greater than `3.10`. A fractional number such as `3.1` is
+ * therefore rejected, not guessed at. `3.0` is read as the integer `3`.
  */
 export function parseNodesApiLevel(value: unknown): NodesApiLevel | null {
 	if (typeof value === 'number') {

@@ -24,7 +24,7 @@ This rule enforces the structural contract:
   integer form.
 - For a minor level, write a string in quotes: `"3.1"`. Without quotes, `3.10`
   is read as the number `3.1`, and `3.9` is read as greater than `3.10`. The
-  rule therefore rejects a number with a decimal point.
+  rule therefore rejects a fractional number such as `3.1`.
 - `n8n.nodes` must be a non-empty array of strings, each starting with `dist/`.
 - `n8n.credentials`, if present, must be an array of strings, each starting
   with `dist/`.

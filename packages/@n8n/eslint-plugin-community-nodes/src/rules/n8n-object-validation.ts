@@ -197,7 +197,7 @@ function validatePathArray(
 
 /**
  * A level is a positive integer (`3` means `3.0`) or a `"<major>"` or
- * `"<major>.<minor>"` string. A number with a decimal point is rejected,
+ * `"<major>.<minor>"` string. A fractional number such as `3.1` is rejected,
  * because an unquoted `3.10` is read as `3.1`.
  */
 function isApiLevel(value: unknown): boolean {
