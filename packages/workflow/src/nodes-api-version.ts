@@ -1,4 +1,5 @@
 import { N8N_NODES_API_VERSION } from '@n8n/constants';
+import { lte } from 'semver';
 
 export { N8N_NODES_API_VERSION };
 
@@ -67,11 +68,6 @@ function formatLevel([major, minor]: NodesApiLevel): string {
 	return `${major}.${minor}`;
 }
 
-/** Whether `[major, minor]` is at most `[maxMajor, maxMinor]`. */
-function isAtMost([major, minor]: NodesApiLevel, [maxMajor, maxMinor]: NodesApiLevel): boolean {
-	return major < maxMajor || (major === maxMajor && minor <= maxMinor);
-}
-
 // A malformed constant would be a build-time mistake; the unit test asserts it
 // parses, so the fallback can never silently downgrade the supported level.
 const SUPPORTED_LEVEL: NodesApiLevel = parseNodesApiLevel(N8N_NODES_API_VERSION) ?? [1, 0];
@@ -94,7 +90,10 @@ export function checkNodesApiVersion(pkgJson: NodesApiVersionPackageJson): Nodes
 	const required = parseNodesApiLevel(declared);
 	if (required === null) return { compatible: false, reason: 'malformed', declared };
 
-	if (isAtMost(required, SUPPORTED_LEVEL)) return { compatible: true };
+	// semver compares full `major.minor.patch` versions. A level has no patch, so add `.0`.
+	if (lte(`${formatLevel(required)}.0`, `${formatLevel(SUPPORTED_LEVEL)}.0`)) {
+		return { compatible: true };
+	}
 
 	return { compatible: false, reason: 'unsupported', declared, required: formatLevel(required) };
 }

@@ -58,6 +58,7 @@
     "@types/lodash": "catalog:",
     "@types/luxon": "catalog:",
     "@types/md5": "^2.3.5",
+    "@types/semver": "catalog:",
     "@types/ssh2": "catalog:",
     "@types/xml2js": "catalog:",
     "fast-check": "catalog:",
@@ -93,7 +94,8 @@
     "transliteration": "2.3.5",
     "uuid": "catalog:",
     "xml2js": "catalog:",
-    "jsonrepair": "catalog:"
+    "jsonrepair": "catalog:",
+    "semver": "catalog:"
   },
   "peerDependencies": {
     "zod": "catalog:"
