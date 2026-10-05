@@ -5,7 +5,10 @@ export namespace n8n {
 		n8n?: {
 			credentials?: string[];
 			nodes?: string[];
-			/** `"<major>"` or `"<major>.<minor>"`; a number is the legacy `<major>.0` form. */
+			/**
+			 * Raw value from package.json: an integer (`3` means `3.0`), `"<major>"` or
+			 * `"<major>.<minor>"`. Parse it with `parseNodesApiLevel` before use.
+			 */
 			n8nNodesApiVersion?: number | string;
 		};
 		author?: {

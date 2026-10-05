@@ -44,7 +44,7 @@ interface IncompatibleNodesApiVersionErrorResponse {
 	httpStatusCode: number;
 	meta: {
 		/**
-		 * API version the package requires, as declared (`"3"` or `"3.1"`), or
+		 * API version the package requires, normalized to `<major>.<minor>` (`"3.0"`), or
 		 * `null` if the declared value is malformed.
 		 */
 		requiredNodesApiVersion: string | null;

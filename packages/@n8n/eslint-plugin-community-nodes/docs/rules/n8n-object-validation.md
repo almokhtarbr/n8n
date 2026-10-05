@@ -17,12 +17,14 @@ register at install time and the failure is opaque to the user.
 This rule enforces the structural contract:
 
 - `package.json` must contain an `n8n` object.
-- `n8n.n8nNodesApiVersion` must be present and must be either a positive
-  integer (`3`) or a major-only string (`"3"`) or a `"<major>.<minor>"` string (`"3.1"`).
-  It must live inside `n8n`, not at the root.
-- A minor level must be a string. A JSON number cannot carry one: `3.10` parses
-  as `3.1`, so minor 10 is unrepresentable, and `3.9 > 3.10` numerically.
-  A fractional number is therefore rejected.
+- `n8n.n8nNodesApiVersion` must be present and must live inside `n8n`, not at
+  the root.
+- For a major level, write a positive integer: `3`. The string `"3"` is also
+  valid. Prefer the integer, because older n8n versions understand only the
+  integer form.
+- For a minor level, write a string in quotes: `"3.1"`. Without quotes, `3.10`
+  is read as the number `3.1`, and `3.9` is read as greater than `3.10`. The
+  rule therefore rejects a number with a decimal point.
 - `n8n.nodes` must be a non-empty array of strings, each starting with `dist/`.
 - `n8n.credentials`, if present, must be an array of strings, each starting
   with `dist/`.

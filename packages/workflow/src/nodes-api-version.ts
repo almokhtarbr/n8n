@@ -7,8 +7,8 @@ export interface NodesApiVersionPackageJson {
 	n8n?: {
 		/**
 		 * Node-authoring API level the package requires, as `"<major>"` or
-		 * `"<major>.<minor>"`. A plain number is the legacy form and means
-		 * `<major>.0`. Absent in legacy packages, which require level 1.
+		 * `"<major>.<minor>"`. An integer means `<major>.0`. Absent in legacy
+		 * packages, which require level 1.
 		 */
 		n8nNodesApiVersion?: unknown;
 	};
@@ -40,10 +40,11 @@ const LEVEL_PATTERN = /^(\d+)(?:\.(\d+))?$/;
  * Parses a declared node API level into `[major, minor]`, or `null` when the
  * value is not a level.
  *
- * Minor levels must be strings. A JSON number cannot carry one: `3.10` parses
- * as `3.1`, so minor 10 is unrepresentable, and `3.9 > 3.10` numerically. A
- * number therefore stays valid only in its legacy integer form (`3` means
- * `3.0`); a fractional number is rejected instead of guessed at.
+ * Levels are compared as `[major, minor]`, never as decimal numbers. A number
+ * is valid only as an integer (`3` means `3.0`). A minor level must be a
+ * string, because an unquoted `3.10` in package.json is read as `3.1`, and
+ * `3.9` is read as greater than `3.10`. A number with a decimal point is
+ * therefore rejected, not guessed at.
  */
 export function parseNodesApiLevel(value: unknown): NodesApiLevel | null {
 	if (typeof value === 'number') {

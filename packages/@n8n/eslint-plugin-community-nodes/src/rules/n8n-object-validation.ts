@@ -34,9 +34,9 @@ export const N8nObjectValidationRule = createRule<[], MessageIds>({
 			wrongLocationApiVersion:
 				'"n8nNodesApiVersion" must be inside the "n8n" section, not at the root level of package.json.',
 			missingNodesApiVersion:
-				'The "n8n" object must declare "n8nNodesApiVersion" (a positive integer, or a "<major>.<minor>" string).',
+				'The "n8n" object must declare "n8nNodesApiVersion" (an integer such as 3, or a quoted string such as "3.1").',
 			invalidNodesApiVersion:
-				'"n8n.n8nNodesApiVersion" must be a positive integer, or a "<major>.<minor>" string such as "3.1", got {{ value }}.',
+				'"n8n.n8nNodesApiVersion" must be a positive integer such as 3, or a quoted "<major>.<minor>" string such as "3.1", got {{ value }}.',
 			missingN8nNodes: 'The "n8n" object must declare "nodes" as an array of "dist/" paths.',
 			n8nNodesNotArray: '"n8n.nodes" must be an array of "dist/" paths.',
 			emptyN8nNodes: '"n8n.nodes" must contain at least one path.',
@@ -196,9 +196,9 @@ function validatePathArray(
 }
 
 /**
- * A level is a positive integer (the legacy `<major>.0` form) or a
- * `"<major>.<minor>"` string. A fractional number is rejected: JSON cannot
- * carry a minor level, because `3.10` parses as `3.1`.
+ * A level is a positive integer (`3` means `3.0`) or a `"<major>"` or
+ * `"<major>.<minor>"` string. A number with a decimal point is rejected,
+ * because an unquoted `3.10` is read as `3.1`.
  */
 function isApiLevel(value: unknown): boolean {
 	if (typeof value === 'number') return Number.isInteger(value) && value > 0;
